@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-on-multiple-arch:
-    name: Build on x86_64 and ARM64
+    name: Build on x86_64
     runs-on: ${{ matrix.runner }} # 使用矩阵中定义的运行器
     strategy:
       matrix:
@@ -16,8 +16,7 @@ jobs:
         include:
           - runner: ubuntu-latest    # x86_64 运行器
             arch: x86_64
-          - runner: ubuntu-24.04-arm # ARM64 运行器[citation:1]
-            arch: arm64
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2   # 官方action，用于获取代码
@@ -34,10 +33,14 @@ jobs:
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/unbound  # 请替换为你的Docker Hub镜像地址
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .        # 构建上下文为当前目录
           push: true        # 构建后推送到仓库
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}    # 使用上一步提取的标签
           labels: ${{ steps.meta.outputs.labels }} # 使用上一步提取的标签
