@@ -1,5 +1,5 @@
 # 使用一个轻量级的基础镜像
-FROM alpine:latest
+FROM alpine:3.18
 
 # 安装unbound和unbound-anchor
 RUN apk add --no-cache unbound unbound-anchor
