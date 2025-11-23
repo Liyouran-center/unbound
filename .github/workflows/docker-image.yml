@@ -16,7 +16,7 @@ jobs:
         include:
           - runner: ubuntu-latest    # x86_64 运行器
             arch: x86_64
-          - runner: ubuntu-latest-arm64 # ARM64 运行器[citation:1]
+          - runner: ubuntu-24.04-arm # ARM64 运行器[citation:1]
             arch: arm64
     steps:
       - name: Check out the repo
