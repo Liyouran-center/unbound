@@ -24,7 +24,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: YOUR_DOCKERHUB_USERNAME/YOUR_IMAGE_NAME  # 请替换为你的Docker Hub镜像地址
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/unbound  # 请替换为你的Docker Hub镜像地址
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
