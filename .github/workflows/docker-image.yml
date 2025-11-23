@@ -7,10 +7,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest   # 在最新的Ubuntu runner上运行
-
+  build-on-multiple-arch:
+    name: Build on x86_64 and ARM64
+    runs-on: ${{ matrix.runner }} # 使用矩阵中定义的运行器
+    strategy:
+      matrix:
+        # 定义构建矩阵，指定不同的运行器环境和架构标签
+        include:
+          - runner: ubuntu-latest    # x86_64 运行器
+            arch: x86_64
+          - runner: ubuntu-latest-arm64 # ARM64 运行器[citation:1]
+            arch: arm64
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2   # 官方action，用于获取代码
