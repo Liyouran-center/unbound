@@ -1,0 +1,35 @@
+name: Publish Docker image
+
+on:
+  push:
+    branches: [ 'master' ]   # 仅在推送到master分支时触发
+    tags: [ 'v*.*.*' ]       # 推送版本标签时也触发，例如 v1.0.0
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest   # 在最新的Ubuntu runner上运行
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2   # 官方action，用于获取代码
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}  # 使用你在GitHub设置的Secrets
+          password: ${{ secrets.DOCKERHUB_TOKEN }}     # 使用Docker Hub的Access Token更安全
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: YOUR_DOCKERHUB_USERNAME/YOUR_IMAGE_NAME  # 请替换为你的Docker Hub镜像地址
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .        # 构建上下文为当前目录
+          push: true        # 构建后推送到仓库
+          tags: ${{ steps.meta.outputs.tags }}    # 使用上一步提取的标签
+          labels: ${{ steps.meta.outputs.labels }} # 使用上一步提取的标签
