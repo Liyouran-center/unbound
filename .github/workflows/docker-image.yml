@@ -37,7 +37,7 @@ jobs:
         uses: docker/setup-qemu-action@v3
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v6
         with:
           context: .        # 构建上下文为当前目录
           push: true        # 构建后推送到仓库
